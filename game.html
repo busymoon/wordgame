@@ -1,0 +1,57 @@
+<html>
+   <head>
+      <title>单词帮手</title>
+	<meta charset="UTF-8">
+      <script type = "text/javascript"  src = "jquery-3.3.1.js"></script>
+      <script type="text/javascript" src="levenshteinDistance.js"></script>
+      <script type="text/javascript" src="longestCommonSubstring.js"></script>
+      <script type="text/javascript" src="all_words.js"></script>
+      <script type = "text/javascript" language = "javascript">
+	//import levenshteinDistance from "levenshteinDistance.js"
+	function near(a,b){
+		w = $('#word').text;
+        a = a.split("(")[0];
+        b = b.split("(")[0];        	
+		return longestCommonSubstring(w,a).length-longestCommonSubstring(w,b).length;
+ 	 };
+	$(function(){
+		$('#btn1').click(function(){
+             	all_words.sort( function(a,b){
+						w = $('#word').val();
+						if (levenshteinDistance(w,a)>levenshteinDistance(w,b)) return 1;
+						return -1;
+				})
+				xx = all_words.slice(0,10).join("<br> ")
+	     		$('#answers').html(xx);
+		})
+	 })
+	$(function(){
+        	 $('#btn2').click(function(){
+				all_words.sort( function(a,b){
+                                w = $('#word').val();
+                                if (longestCommonSubstring(w,a).length < longestCommonSubstring(w,b).length) return 1;
+                                return -1;
+                        })
+                        xx = all_words.slice(0,10).join("<br> ")
+                        $('#answers').html(xx);
+         	})
+
+	})
+      </script>
+   </head>
+	
+   <body>
+      <div>
+		<h1>背单词好助手</h1>
+		<p>
+		通过展示单词的相近的词语，提高记忆的效率，让单词更容易记住，更容易记牢固。
+		<p>
+         请输入单词：<input type=text id = "word" style=" width:280px; height:80px;font-size:30px;"/>
+		 <!-- button id=btn1  style=" width:680px; height:680px; border:0; background:url(a.jpg) no-repeat left top"></button-->
+         <button id=btn1  style=" width:80px; height:40px; border:0; no-repeat left top">aaa</button>
+		<button id=btn2 style=" width:80px; height:40px; border:0; no-repeat left top">bbb</button>
+		<p>
+         <div id=answers style=" font-size:30px"/>
+      </div>
+   </body>
+</html>
