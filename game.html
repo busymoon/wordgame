@@ -16,24 +16,45 @@
  	 };
 	$(function(){
 		$('#btn1').click(function(){
+		/*
              	all_words.sort( function(a,b){
 						w = $('#word').val();
 						if (levenshteinDistance(w,a)>levenshteinDistance(w,b)) return 1;
 						return -1;
 				})
-				xx = all_words.slice(0,10).join("<br> ")
-	     		$('#answers').html(xx);
+				*/
+				var dist_array = []
+				for (let i=0; i<all_words.length;i++){
+					w = $('#word').val();
+					dist_array.push(levenshteinDistance(w.toLowerCase(),all_words[i].toLowerCase()) *4000+i);
+				}
+				dist_array.sort(function(a,b){
+					return a-b
+				})
+				var dda=[]
+				for ( let i=0;i<10;i++){
+					dda.push(all_words[dist_array[i]%4000])
+				}
+	     		$('#answers1').html(dda.join("<br> "));
 		})
 	 })
 	$(function(){
-        	 $('#btn2').click(function(){
-				all_words.sort( function(a,b){
-                                w = $('#word').val();
-                                if (longestCommonSubstring(w,a).length < longestCommonSubstring(w,b).length) return 1;
-                                return -1;
-                        })
-                        xx = all_words.slice(0,10).join("<br> ")
-                        $('#answers').html(xx);
+        	 $('#btn1').click(function(){
+						var dist_array = []
+						for (let i=0; i<all_words.length;i++){
+							w = $('#word').val().toLowerCase();
+							cm = longestCommonSubstring(w,all_words[i].toLowerCase())
+							dist_array.push(cm.length *4000+i);
+						}
+						dist_array.sort(function(a,b){
+							return b-a
+						})
+						//alert(dist_array)
+						var dda=[]
+						for ( let i=0;i<10;i++){
+							dda.push(all_words[dist_array[i]%4000])
+						}
+						$('#answers2').html(dda.join("<br> "));
          	})
 
 	})
@@ -49,9 +70,15 @@
          请输入单词：<input type=text id = "word" style=" width:280px; height:80px;font-size:30px;"/>
 		 <!-- button id=btn1  style=" width:680px; height:680px; border:0; background:url(a.jpg) no-repeat left top"></button-->
          <button id=btn1  style=" width:80px; height:40px; border:0; no-repeat left top">aaa</button>
-		<button id=btn2 style=" width:80px; height:40px; border:0; no-repeat left top">bbb</button>
+		<!--button id=btn2 style=" width:80px; height:40px; border:0; no-repeat left top">bbb</button-->
 		<p>
-         <div id=answers style=" font-size:30px"/>
+		<table border="1">
+			<tr>
+			<td  style="widht:100px;"><div id=answers1 style=" font-size:30px"/></td>
+			<td  style="widht:100px;"><div id=answers2 style=" font-size:30px"/></td>
+			</tr>
+		</table>
+        
       </div>
    </body>
 </html>
