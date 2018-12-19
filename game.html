@@ -6,6 +6,7 @@
       <script type="text/javascript" src="levenshteinDistance.js"></script>
       <script type="text/javascript" src="longestCommonSubstring.js"></script>
       <script type="text/javascript" src="all_words.js"></script>
+	  <script type="text/javascript" src="all_words_x.js"></script>
       <script type = "text/javascript" language = "javascript">
 	//import levenshteinDistance from "levenshteinDistance.js"
 	function near(a,b){
@@ -24,16 +25,17 @@
 				})
 				*/
 				var dist_array = []
-				for (let i=0; i<all_words.length;i++){
+				for (let i=0; i<all_words_x.length;i++){
 					w = $('#word').val();
-					dist_array.push(levenshteinDistance(w.toLowerCase(),all_words[i].toLowerCase()) *4000+i);
+					dist_array.push(levenshteinDistance(w.toLowerCase(),all_words_x[i].word) *4000+i);
 				}
 				dist_array.sort(function(a,b){
 					return a-b
 				})
 				var dda=[]
 				for ( let i=0;i<10;i++){
-					dda.push(all_words[dist_array[i]%4000])
+					wd = all_words_x[dist_array[i]%4000]
+					dda.push(wd.toStr())
 				}
 	     		$('#answers1').html(dda.join("<br> "));
 		})
@@ -41,9 +43,9 @@
 	$(function(){
         	 $('#btn1').click(function(){
 						var dist_array = []
-						for (let i=0; i<all_words.length;i++){
+						for (let i=0; i<all_words_x.length;i++){
 							w = $('#word').val().toLowerCase();
-							cm = longestCommonSubstring(w,all_words[i].toLowerCase())
+							cm = longestCommonSubstring(w,all_words_x[i].word)
 							dist_array.push(cm.length *4000+i);
 						}
 						dist_array.sort(function(a,b){
@@ -52,7 +54,7 @@
 						//alert(dist_array)
 						var dda=[]
 						for ( let i=0;i<10;i++){
-							dda.push(all_words[dist_array[i]%4000])
+							dda.push(all_words_x[dist_array[i]%4000].toStr())
 						}
 						$('#answers2').html(dda.join("<br> "));
          	})
