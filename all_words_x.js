@@ -4,8 +4,8 @@ this.word=wrd;
 this.pron=pron;
 this.chinese=chn;
 
-function toStr(){
-	return this.word+" " +this.pron+" "+this.chinese;
+function toStr(obj){
+	return [obj.word,obj.pron,obj.chinese].join(' ');
 }
 }
 

@@ -9,14 +9,17 @@
 	  <script type="text/javascript" src="all_words_x.js"></script>
       <script type = "text/javascript" language = "javascript">
 	//import levenshteinDistance from "levenshteinDistance.js"
+  function toStr(obj){
+  	return [obj.word,obj.pron,obj.chinese].join(' ');
+  }
 	function near(a,b){
 		w = $('#word').text;
         a = a.split("(")[0];
-        b = b.split("(")[0];        	
+        b = b.split("(")[0];
 		return longestCommonSubstring(w,a).length-longestCommonSubstring(w,b).length;
  	 };
 	$(function(){
-		$('#btn1').click(function(){
+		$('#word').keydown(function(){
 		/*
              	all_words.sort( function(a,b){
 						w = $('#word').val();
@@ -35,13 +38,13 @@
 				var dda=[]
 				for ( let i=0;i<10;i++){
 					wd = all_words_x[dist_array[i]%4000]
-					dda.push(wd.toStr())
+					dda.push(toStr(wd))
 				}
 	     		$('#answers1').html(dda.join("<br> "));
 		})
 	 })
 	$(function(){
-        	 $('#btn1').click(function(){
+        	 $('#word').keydown(function(){
 						var dist_array = []
 						for (let i=0; i<all_words_x.length;i++){
 							w = $('#word').val().toLowerCase();
@@ -54,7 +57,7 @@
 						//alert(dist_array)
 						var dda=[]
 						for ( let i=0;i<10;i++){
-							dda.push(all_words_x[dist_array[i]%4000].toStr())
+							dda.push(toStr(all_words_x[dist_array[i]%4000]))
 						}
 						$('#answers2').html(dda.join("<br> "));
          	})
@@ -62,7 +65,7 @@
 	})
       </script>
    </head>
-	
+
    <body>
       <div>
 		<h1>背单词好助手</h1>
@@ -70,17 +73,14 @@
 		通过展示单词的相近的词语，提高记忆的效率，让单词更容易记住，更容易记牢固。
 		<p>
          请输入单词：<input type=text id = "word" style=" width:280px; height:80px;font-size:30px;"/>
-		 <!-- button id=btn1  style=" width:680px; height:680px; border:0; background:url(a.jpg) no-repeat left top"></button-->
-         <button id=btn1  style=" width:80px; height:40px; border:0; no-repeat left top">aaa</button>
-		<!--button id=btn2 style=" width:80px; height:40px; border:0; no-repeat left top">bbb</button-->
 		<p>
 		<table border="1">
 			<tr>
-			<td  style="widht:100px;"><div id=answers1 style=" font-size:30px"/></td>
-			<td  style="widht:100px;"><div id=answers2 style=" font-size:30px"/></td>
+			<td  style="widht:100px;"><div id=answers1 style=" font-size:20px"/></td>
+			<td  style="widht:100px;"><div id=answers2 style=" font-size:20px"/></td>
 			</tr>
 		</table>
-        
+
       </div>
    </body>
 </html>
