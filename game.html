@@ -18,6 +18,14 @@
         b = b.split("(")[0];
 		return longestCommonSubstring(w,a).length-longestCommonSubstring(w,b).length;
  	 };
+
+   function wrap(wd, i){
+     if(i%2===0){
+       return "<font color='blue'>"+wd+"</font>";
+     }else{
+       return wd
+     }
+   }
 	$(function(){
 		$('#word').keydown(function(){
 		/*
@@ -38,9 +46,9 @@
 				var dda=[]
 				for ( let i=0;i<10;i++){
 					wd = all_words_x[dist_array[i]%4000]
-					dda.push(toStr(wd))
+					dda.push( wrap(toStr(wd), i))
 				}
-	     		$('#answers1').html(dda.join("<br> "));
+	     	$('#answers1').html(dda.join("<br> "));
 		})
 	 })
 	$(function(){
@@ -57,7 +65,7 @@
 						//alert(dist_array)
 						var dda=[]
 						for ( let i=0;i<10;i++){
-							dda.push(toStr(all_words_x[dist_array[i]%4000]))
+							dda.push(wrap(toStr(all_words_x[dist_array[i]%4000]),i))
 						}
 						$('#answers2').html(dda.join("<br> "));
          	})
