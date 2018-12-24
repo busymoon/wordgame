@@ -3,10 +3,6 @@ function WordX(wrd,pron,chn)
 this.word=wrd;
 this.pron=pron;
 this.chinese=chn;
-
-function toStr(obj){
-	return [obj.word,obj.pron,obj.chinese].join(' ');
-}
 }
 
 all_words_x=[
