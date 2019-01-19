@@ -32,59 +32,71 @@ class RI(object):
 
     @classmethod
     def process(cls, p, f_name):
-
         s_list = sent_tokenize(p)
+        next = ""
 
         for s in s_list:
+            if next:
+                s = next + s
+                next = ""
+            words = word_tokenize(s)
+            if len(words)<5:
+                if len(s)<30:
+                    next=  s
+                continue
 
-            if not wordnet.synsets(s[0]):
-                return
+            if len(s)>100 or 5>sum([1 if wordnet.synsets(wrd) else 0 for wrd in words]):
+                # print("abandomed:"+s)
+                continue
 
-            #print(s)
             idx = len(cls.sent_list)
             cls.sent_list.append(s + u"--*{}*".format(f_name))
 
-            words = word_tokenize(s)
-            if len(words)<10:
-                continue
-
             for w in set(words):
                 w = w.lower()
-
                 if not wordnet.synsets(w):
                     continue
-
                 if w not in stop_words:
-                    #print(w)
                     w = ps.stem(w)
                     if w not in cls.word_map:
                         cls.word_map[w] = []
                     if idx not in cls.word_map[w]:
                         cls.word_map[w].append(idx)
-        return s_list[-1]
 
-fns=["Black Beauty","Paris","aesop"]
+fns=["Black Beauty","Paris","aesop","book_bug_1_nodrm","book_bug_2","book_bug_3_nodrm"]
 count = 0
 buffer=""
 for fn in fns:
     with open(fn+".txt","r") as f:
         for line in f.readlines():
+            if line.strip()=="":
+                continue
             count = count+1
             if count % 1000==0:
-                print(count)
+                print("processed line {} get sentence{}".format(count,len(RI.sent_list)))
 
-            RI.process(line,fn)
+            buffer = buffer + line
+            if len(buffer)>1000:
+                offset = buffer.rfind(".")
+                if offset < 0:
+                    cnt = buffer
+                    buffer = ""
+                else:
+                    cnt = buffer[:offset]
+                    buffer = buffer[offset+1:]
+                RI.process(cnt,fn)
+
 
 import json
 s = json.dumps(RI.sent_list,skipkeys=False, indent=4, sort_keys=False)
 
 with open("out_sent_list.js","w") as out:
-    out.write(s)
+    out.write("sent_list="+s)
 
 s = json.dumps(RI.word_map,skipkeys=False, indent=4, sort_keys=False)
 
 with open("out_word_map.js","w") as out:
-    out.write(s)
+    out.write("word_map="+s)
 
 print(s)
 

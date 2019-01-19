@@ -2,18 +2,19 @@
    <head>
       <title>单词帮手</title>
 	<meta charset="UTF-8">
-      <script type = "text/javascript"  src = "jquery-3.3.1.js"></script>
-      <script type="text/javascript" src="levenshteinDistance.js"></script>
-      <script type="text/javascript" src="longestCommonSubstring.js"></script>
-      <script type="text/javascript" src="all_words.js"></script>
-	  <script type="text/javascript" src="all_words_x.js"></script>
+      <script type = "text/javascript"  src = "lib/jquery-3.3.1.js"></script>
+      <script type="text/javascript" src="lib/levenshteinDistance.js"></script>
+      <script type="text/javascript" src="lib/longestCommonSubstring.js"></script>
+      <script type="text/javascript" src="lib/out_sent_list.js"></script>
+      <script type="text/javascript" src="lib/out_word_map.js"></script>
+      <script type="text/javascript" src="all_words_x.js"></script>
       <script type = "text/javascript" language = "javascript">
 	//import levenshteinDistance from "levenshteinDistance.js"
   function toStr(obj){
   	return [obj.word,obj.pron,obj.chinese].join(' ');
   }
 	function near(a,b){
-		w = $('#word').text;
+		    w = $('#word').text;
         a = a.split("(")[0];
         b = b.split("(")[0];
 		return longestCommonSubstring(w,a).length-longestCommonSubstring(w,b).length;
@@ -26,30 +27,40 @@
        return wd
      }
    }
+   function join_words(dist_array,len){
+     //alert(dist_array)
+     var dda=[]
+     for ( let i=0;i<10;i++){
+       dda.push(wrap(toStr(all_words_x[dist_array[i]%4000]),i))
+     }
+     return dda
+   }
+
+   function get_sent(word){
+     idx_array = word_map[word]
+     if (idx_array == undefined){
+       return "";
+     }
+     idx = Math.floor(Math.random()*idx_array.length)
+      sent_array = sent_list[idx_array[idx]]
+     return sent_array
+   }
 	$(function(){
-		$('#word').keydown(function(){
-		/*
-             	all_words.sort( function(a,b){
-						w = $('#word').val();
-						if (levenshteinDistance(w,a)>levenshteinDistance(w,b)) return 1;
-						return -1;
-				})
-				*/
-				var dist_array = []
-				for (let i=0; i<all_words_x.length;i++){
-					w = $('#word').val();
-					dist_array.push(levenshteinDistance(w.toLowerCase(),all_words_x[i].word) *4000+i);
-				}
-				dist_array.sort(function(a,b){
-					return a-b
-				})
-				var dda=[]
-				for ( let i=0;i<10;i++){
-					wd = all_words_x[dist_array[i]%4000]
-					dda.push( wrap(toStr(wd), i))
-				}
-	     	$('#answers1').html(dda.join("<br> "));
-		})
+    		$('#word').keydown(function(){
+            w = $('#word').val();
+    				var dist_array = []
+    				for (let i=0; i<all_words_x.length;i++){
+    					dist_array.push(levenshteinDistance(w.toLowerCase(),all_words_x[i].word) *4000+i);
+    				}
+
+    				dist_array.sort(function(a,b){
+    					return a-b
+    				})
+
+            $('#sample').html(get_sent(w));
+
+    	     	$('#answers1').html(join_words(dist_array,10).join("<br> "));
+    		})
 	 })
 	$(function(){
         	 $('#word').keydown(function(){
@@ -62,14 +73,9 @@
 						dist_array.sort(function(a,b){
 							return b-a
 						})
-						//alert(dist_array)
-						var dda=[]
-						for ( let i=0;i<10;i++){
-							dda.push(wrap(toStr(all_words_x[dist_array[i]%4000]),i))
-						}
-						$('#answers2').html(dda.join("<br> "));
-         	})
 
+						$('#answers2').html(join_words(dist_array,10).join("<br> "));
+         	})
 	})
       </script>
    </head>
@@ -83,6 +89,12 @@
          请输入单词：<input type=text id = "word" style=" width:280px; height:80px;font-size:30px;"/>
 		<p>
 		<table border="1">
+      <tr>
+        <td colspan="2">
+          <div id=sample style=" font-size:20px"/>
+          <br>
+        </td>
+      </tr>
 			<tr>
 			<td  style="widht:100px;"><div id=answers1 style=" font-size:20px"/></td>
 			<td  style="widht:100px;"><div id=answers2 style=" font-size:20px"/></td>

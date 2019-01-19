@@ -1,8 +1,8 @@
 function WordX(wrd,pron,chn)
 {
-this.word=wrd;
-this.pron=pron;
-this.chinese=chn;
+	this.word=wrd;
+	this.pron=pron;
+	this.chinese=chn;
 }
 
 all_words_x=[
